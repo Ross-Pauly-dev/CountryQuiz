@@ -4,5 +4,6 @@ export type AnswerButtonProps = {
     answerText: string;
     showAsCorrect?: boolean;
     showAsIncorrect?: boolean;
+    showCorrectCheckMark?: boolean;
     isDisabled?: boolean;
 }

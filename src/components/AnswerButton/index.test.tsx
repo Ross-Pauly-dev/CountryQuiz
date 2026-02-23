@@ -47,6 +47,17 @@ describe('AnswerButton', () => {
     expect(radio).toBeInTheDocument()
   })
 
+  it('shows Badge when showCorrectCheckMark is true and still shows answer text', () => {
+    const { container } = renderAnswerButton({
+      answerId: '1',
+      answerText: 'Paris',
+      showCorrectCheckMark: true,
+    })
+    const badge = container.querySelector('.badge')
+    expect(badge).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: 'Paris' })).toBeInTheDocument()
+  })
+
   it('has no accessibility violations', async () => {
     const { container } = renderAnswerButton({
       answerId: '1',

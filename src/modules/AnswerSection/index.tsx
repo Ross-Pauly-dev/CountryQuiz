@@ -15,6 +15,16 @@ const AnswerSection = () => {
 		(aq) => aq.questionId === currentQuestionId,
 	)?.selectedAnswerId;
 
+	const answeredEntry = answeredQuestions.find(
+		(aq) => aq.questionId === currentQuestionId,
+	);
+	const liveMessage =
+		question && answeredEntry
+			? answeredEntry.selectedAnswerId === answeredEntry.correctAnswerId
+				? `Correct. ${question.answers.find((a) => a.id === answeredEntry.selectedAnswerId)?.text ?? ''}.`
+				: `Incorrect. The correct answer was ${question.answers.find((a) => a.id === answeredEntry.correctAnswerId)?.text ?? ''}.`
+			: '';
+
 	const headingId = `answer-section-question-${currentQuestionId}`;
 
 	const handleAnswerChange = useCallback(
@@ -67,6 +77,13 @@ const AnswerSection = () => {
 				aria-labelledby={headingId}
 				role='region'
 			>
+				<div
+					className='answer-section__sr-only'
+					aria-live='polite'
+					aria-atomic='true'
+				>
+					{liveMessage}
+				</div>
 				<h2
 					id={headingId}
 					className='answer-section__question'
@@ -108,6 +125,10 @@ const AnswerSection = () => {
 									showAsIncorrect:
 										answer.id === selectedAnswerId &&
 										answer.id !== question.correctAnswerId,
+									showCorrectCheckMark:
+										!!selectedAnswerId &&
+										answer.id === question.correctAnswerId &&
+										selectedAnswerId !== question.correctAnswerId,
 								})}
 							/>
 						))}

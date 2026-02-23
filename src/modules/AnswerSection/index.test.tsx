@@ -103,6 +103,69 @@ describe('AnswerSection', () => {
     expect(correctButton).toBeInTheDocument()
   })
 
+  it('shows check mark Badge on correct answer when user answered incorrectly', () => {
+    vi.mocked(useQuizStore).mockReturnValue(
+      createMockQuizStore({
+        questions: sampleQuestions,
+        currentQuestionId: '1',
+        answeredQuestions: [
+          {
+            questionId: '1',
+            selectedAnswerId: '2',
+            correctAnswerId: '1',
+          },
+        ],
+      })
+    )
+    render(<AnswerSection />)
+    const parisRadio = screen.getByRole('radio', { name: 'Paris' })
+    const parisButton = parisRadio.closest('.answer-button')
+    const badge = parisButton?.querySelector('.badge')
+    expect(badge).toBeInTheDocument()
+  })
+
+  it('has aria-live region that announces result when question is answered', () => {
+    vi.mocked(useQuizStore).mockReturnValue(
+      createMockQuizStore({
+        questions: sampleQuestions,
+        currentQuestionId: '1',
+        answeredQuestions: [
+          {
+            questionId: '1',
+            selectedAnswerId: '1',
+            correctAnswerId: '1',
+          },
+        ],
+      })
+    )
+    render(<AnswerSection />)
+    const liveRegion = document.querySelector('[aria-live="polite"]')
+    expect(liveRegion).toBeInTheDocument()
+    expect(liveRegion).toHaveTextContent('Correct. Paris.')
+  })
+
+  it('aria-live region shows incorrect message when user was wrong', () => {
+    vi.mocked(useQuizStore).mockReturnValue(
+      createMockQuizStore({
+        questions: sampleQuestions,
+        currentQuestionId: '1',
+        answeredQuestions: [
+          {
+            questionId: '1',
+            selectedAnswerId: '2',
+            correctAnswerId: '1',
+          },
+        ],
+      })
+    )
+    render(<AnswerSection />)
+    const liveRegion = document.querySelector('[aria-live="polite"]')
+    expect(liveRegion).toBeInTheDocument()
+    expect(liveRegion).toHaveTextContent(
+      'Incorrect. The correct answer was Paris.'
+    )
+  })
+
   it('has no accessibility violations', async () => {
     const { container } = render(<AnswerSection />)
     await expectNoA11yViolations(container)
