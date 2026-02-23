@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { vi } from 'vitest'
 import App from './App'
 import { createMockQuizStore, sampleQuestions } from './test/mocks/quizStore'
@@ -11,7 +12,7 @@ vi.mock('react-router-dom', async (importOriginal) => {
   return {
     ...actual,
     BrowserRouter: ({ children }: { children: React.ReactNode }) => (
-      <MemoryRouter initialEntries={routerInitialEntries.value}>
+      <MemoryRouter initialEntries={routerInitialEntries.value} initialIndex={0}>
         {children}
       </MemoryRouter>
     ),
@@ -22,9 +23,51 @@ vi.mock('./store/quizStore', () => ({
   useQuizStore: vi.fn(),
 }))
 
+vi.mock('./queries/questions', () => ({
+  useQuestionsQuery: vi.fn(),
+}))
+
 const { useQuizStore } = await import('./store/quizStore')
+const { useQuestionsQuery } = await import('./queries/questions')
+
+const mockQuestionsQueryReturn = {
+  data: sampleQuestions,
+  isPending: false,
+  error: null,
+  isError: false,
+  isSuccess: true,
+  status: 'success' as const,
+  fetchStatus: 'idle' as const,
+  dataUpdatedAt: 0,
+  errorUpdatedAt: 0,
+  isFetched: true,
+  isFetchedAfterMount: true,
+  isRefetching: false,
+  isLoading: false,
+  isLoadingError: false,
+  isPaused: false,
+  isPlaceholderData: false,
+  isRefetchError: false,
+  isStale: false,
+  refetch: vi.fn(),
+}
 
 describe('App', () => {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  })
+
+  beforeEach(() => {
+    vi.mocked(useQuestionsQuery).mockReturnValue(mockQuestionsQueryReturn as unknown as ReturnType<typeof useQuestionsQuery>)
+  })
+
+  const renderApp = () =>
+    render(
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    )
+
   it('redirects / to /quiz', () => {
     routerInitialEntries.value = ['/']
     vi.mocked(useQuizStore).mockReturnValue(
@@ -34,7 +77,7 @@ describe('App', () => {
         answeredQuestions: [],
       })
     )
-    render(<App />)
+    renderApp()
     expect(screen.getByText('What is the capital of France?')).toBeInTheDocument()
   })
 
@@ -47,7 +90,7 @@ describe('App', () => {
         answeredQuestions: [],
       })
     )
-    render(<App />)
+    renderApp()
     expect(screen.getByRole('heading', { name: 'Country Quiz' })).toBeInTheDocument()
     expect(screen.getByText('What is the capital of France?')).toBeInTheDocument()
   })
@@ -61,7 +104,7 @@ describe('App', () => {
         numCorrectAnswers: 2,
       })
     )
-    render(<App />)
+    renderApp()
     expect(screen.getByRole('heading', { name: 'Results' })).toBeInTheDocument()
     expect(screen.getByText(/You got 2 out of 2 correct/)).toBeInTheDocument()
   })
@@ -74,7 +117,7 @@ describe('App', () => {
         isComplete: false,
       })
     )
-    render(<App />)
+    renderApp()
     expect(screen.getByText('What is the capital of France?')).toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: 'Results' })).not.toBeInTheDocument()
   })

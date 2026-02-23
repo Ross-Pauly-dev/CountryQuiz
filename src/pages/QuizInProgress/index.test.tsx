@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
 import { renderWithRouter } from '../../test/utils'
@@ -19,11 +19,37 @@ vi.mock('../../store/quizStore', () => ({
   useQuizStore: vi.fn(),
 }))
 
+vi.mock('../../queries/questions', () => ({
+  useQuestionsQuery: vi.fn(),
+}))
+
 const { useQuizStore } = await import('../../store/quizStore')
+const { useQuestionsQuery } = await import('../../queries/questions')
 
 describe('QuizInProgress', () => {
   beforeEach(() => {
     mockNavigate.mockClear()
+    vi.mocked(useQuestionsQuery).mockReturnValue({
+      data: sampleQuestions,
+      isPending: false,
+      error: null,
+      isError: false,
+      isSuccess: true,
+      status: 'success',
+      fetchStatus: 'idle',
+      dataUpdatedAt: 0,
+      errorUpdatedAt: 0,
+      isFetched: true,
+      isFetchedAfterMount: true,
+      isRefetching: false,
+      isLoading: false,
+      isLoadingError: false,
+      isPaused: false,
+      isPlaceholderData: false,
+      isRefetchError: false,
+      isStale: false,
+      refetch: vi.fn(),
+    } as unknown as ReturnType<typeof useQuestionsQuery>)
   })
 
   it('renders Header, QuestionSelector, and AnswerSection', () => {
@@ -53,7 +79,7 @@ describe('QuizInProgress', () => {
     )
     renderWithRouter(<QuizInProgress />, { route: '/quiz' })
     expect(setQuestions).toHaveBeenCalled()
-    expect(setQuestions.mock.calls[0][0]).toHaveLength(5)
+    expect(setQuestions.mock.calls[0][0]).toHaveLength(sampleQuestions.length)
   })
 
   it('shows See results button when quiz is complete', () => {

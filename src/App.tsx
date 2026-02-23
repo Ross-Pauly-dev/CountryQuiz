@@ -5,7 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/country-quiz">
       <Routes>
         <Route path="/quiz" element={<QuizInProgress />} />
         <Route
