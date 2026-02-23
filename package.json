@@ -8,6 +8,7 @@
     "dev:server": "npm run dev --prefix server",
     "dev:all": "concurrently -n front,server \"npm run dev\" \"npm run dev:server\"",
     "build": "tsc -b && vite build",
+    "postbuild": "node -e \"require('fs').copyFileSync('dist/index.html','dist/404.html')\"",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",

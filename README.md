@@ -51,3 +51,7 @@ Other commands:
 - `npm run test` - Run tests in watch mode
 - `npm run test:run` - Run tests once
 - `npm run test:coverage` - Run tests with coverage
+
+## GitHub Pages deployment
+
+The app is deployed to GitHub Pages. The build copies `index.html` to `dist/404.html` so that when users open or reload a client-side route (e.g. `/CountryQuiz/quiz`), GitHub Pages serves the SPA instead of a 404. Without this, only the root URL would work after a full reload.
