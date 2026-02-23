@@ -10,8 +10,19 @@ const DEFAULT_COUNT = 10;
 const MIN_COUNT = 1;
 const MAX_COUNT = 20;
 
+// Allow comma-separated origins; default localhost for local dev. No env = local only.
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim()).filter(Boolean)
+  : ['http://localhost:5173'];
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN ?? 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (origin === undefined || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
 }));
 app.use(express.json());
 
