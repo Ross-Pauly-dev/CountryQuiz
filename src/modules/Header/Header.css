@@ -1,0 +1,19 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #343963;
+  border-radius: 0.5rem;
+  font-size: 20px;
+  color: #ffffff;
+}
+.header-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+.header-score {
+  font-size: 20px;
+  font-weight: 600;
+}

@@ -1,0 +1,19 @@
+.answer-section {
+  &__question {
+    margin: 0 0 1rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  &__options {
+    display: grid;
+    grid-template-columns: repeat(2, 320px);
+    gap: 0.5rem;
+    justify-content: center;
+    
+    @media (max-width: 680px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}

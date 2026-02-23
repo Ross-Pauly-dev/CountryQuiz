@@ -1,0 +1,17 @@
+.answer-section__question {
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-align: center;
+}
+.answer-section__options {
+  display: grid;
+  grid-template-columns: repeat(2, 320px);
+  gap: 0.5rem;
+  justify-content: center;
+}
+@media (max-width: 680px) {
+  .answer-section__options {
+    grid-template-columns: 1fr;
+  }
+}
