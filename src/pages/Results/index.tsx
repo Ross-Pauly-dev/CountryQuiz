@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { questionsQueryKey } from '../../queries';
 import { useQuizStore } from '../../store/quizStore';
 import Header from '../../modules/Header';
 import Card from '../../components/Card';
@@ -8,12 +10,14 @@ import './Results.css';
 
 const Results = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { questions, numCorrectAnswers, resetQuiz } = useQuizStore();
 
   const handleGenerateNewQuiz = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: questionsQueryKey });
     resetQuiz();
     navigate('/quiz');
-  }, [resetQuiz, navigate]);
+  }, [queryClient, resetQuiz, navigate]);
 
   return (
     <>

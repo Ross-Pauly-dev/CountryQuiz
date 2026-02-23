@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuizStore } from '../../store/quizStore';
-import { questions as questionsStub } from '../../stub/questions_stub';
+import { useQuestionsQuery } from '../../queries';
 import QuestionSelector from '../../modules/QuestionSelector';
 import AnswerSection from '../../modules/AnswerSection';
 import Button from '../../components/Button';
@@ -11,23 +11,20 @@ import Header from '../../modules/Header';
 
 const QuizInProgress = () => {
 	const navigate = useNavigate();
-	const { setQuestions, isComplete, resetQuiz, answeredQuestions } =
+	const { setQuestions, isComplete, answeredQuestions, questions } =
 		useQuizStore();
 	const questionSelectorRef = useRef<HTMLDivElement>(null);
 
+	const { data, isPending, error } = useQuestionsQuery();
+
 	useEffect(() => {
-		if (isComplete) {
-			resetQuiz();
+		if (data?.length) {
+			setQuestions(data);
 		}
-		const questions = questionsStub;
-		setQuestions(questions);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [data, setQuestions]);
 
 	useEffect(() => {
 		if (answeredQuestions?.length > 0 && !isComplete) {
-			// Focus the current question button after we answer a question
-			// Make sure it is not the last question, if it is, focus the see results button (elsewhere)
 			const currentQuestion = questionSelectorRef.current?.querySelector(
 				'[data-current-question="true"]',
 			);
@@ -42,6 +39,50 @@ const QuizInProgress = () => {
 	const handleNavigateToResults = useCallback(() => {
 		navigate('/results');
 	}, [navigate]);
+
+	if (isPending) {
+		return (
+			<>
+				<Header />
+				<div className='quiz-container-inprogress'>
+					<Card>
+						<p>Loading questions…</p>
+					</Card>
+				</div>
+			</>
+		);
+	}
+
+	if (error) {
+		return (
+			<>
+				<Header />
+				<div className='quiz-container-inprogress'>
+					<Card>
+						<p role='alert'>{error.message}</p>
+						<Button
+							label='Try again'
+							onPress={() => window.location.reload()}
+						/>
+					</Card>
+				</div>
+			</>
+		);
+	}
+
+	// Wait for store to have questions after data loads
+	if (data && questions.length === 0) {
+		return (
+			<>
+				<Header />
+				<div className='quiz-container-inprogress'>
+					<Card>
+						<p>Loading questions…</p>
+					</Card>
+				</div>
+			</>
+		);
+	}
 
 	return (
 		<>
