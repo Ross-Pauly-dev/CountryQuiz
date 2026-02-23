@@ -14,7 +14,7 @@ const Results = () => {
   const { questions, numCorrectAnswers, resetQuiz } = useQuizStore();
 
   const handleGenerateNewQuiz = useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: questionsQueryKey });
+    queryClient.removeQueries({ queryKey: questionsQueryKey });
     resetQuiz();
     navigate('/quiz');
   }, [queryClient, resetQuiz, navigate]);
