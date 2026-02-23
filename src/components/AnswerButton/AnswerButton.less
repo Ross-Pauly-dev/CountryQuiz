@@ -1,0 +1,53 @@
+@import '../../styles/variables.less';
+.answer-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 4rem;
+  padding: 1rem;
+  min-width: min(100%, 320px);
+  max-width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.5rem;
+  transition: border-color 0.15s, background-color 0.15s;
+
+  &:hover:not([data-disabled]) {
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  &[data-focus-visible] {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  &[data-selected] {
+    border-color: currentColor;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &[data-disabled] {
+    opacity: 0.9;
+    cursor: not-allowed;
+  }
+
+  &__text {
+    display: block;
+    width: 100%;
+    text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  &.answer-button__correct {
+    background-color: @button-question-color-correct;
+  }
+
+  &.answer-button__incorrect {
+    background-color: @button-question-color-incorrect;
+  }
+
+}

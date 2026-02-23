@@ -1,0 +1,33 @@
+@import '../../styles/variables.less';
+
+.question-button {
+    
+    width: @button-question-size;
+    height: @button-question-size;
+    padding: 0;
+    border-radius: @button-question-border-radius;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    background: @button-question-color-primary;
+    color: @text-color-primary;
+
+    &:focus-visible, &:focus, &:hover {
+      outline: @focus-outline-width solid @focus-outline-color;
+      outline-offset: @focus-outline-offset;
+    }
+
+    &--selected {
+      background: @button-question-color-selected;
+    }
+
+    &--correct {
+      background: @button-question-color-correct !important;
+    }
+
+    &--incorrect {
+      background: @button-question-color-incorrect !important;
+    }
+}

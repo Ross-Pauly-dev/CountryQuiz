@@ -1,0 +1,36 @@
+@import '../../styles/variables.less';
+
+.app-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  padding: 1rem;
+  min-width: min(100%, 200px);
+  max-width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+  background: @button-results-color-primary;
+  border: none;
+  border-radius: @border-radius;
+  color: @text-color-primary;
+  font: inherit;
+  transition: opacity 0.15s, filter 0.15s;
+
+  &:focus-visible,
+  &:focus,
+  &:hover {
+    outline: @focus-outline-width solid @focus-outline-color;
+    outline-offset: @focus-outline-offset;
+  }
+
+  &__text {
+    display: block;
+    width: 100%;
+    text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}

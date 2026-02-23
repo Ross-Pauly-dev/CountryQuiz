@@ -1,0 +1,28 @@
+.question-button {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  background: #393f6f;
+  color: #ffffff;
+}
+.question-button:focus-visible,
+.question-button:focus,
+.question-button:hover {
+  outline: 2px solid #3E9FFF;
+  outline-offset: 2px;
+}
+.question-button--selected {
+  background: linear-gradient(#E65895, #BC6BE8);
+}
+.question-button--correct {
+  background: #008000 !important;
+}
+.question-button--incorrect {
+  background: #FF0000 !important;
+}
