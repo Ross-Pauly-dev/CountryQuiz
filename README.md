@@ -1,6 +1,6 @@
 # Country Quiz
 
-A quiz app where you answer questions about countries. Pick a question, choose your answer, move through the quiz, and see your score at the end.
+A quiz app where you answer questions about countries. Pick a question, choose your answer, move through the quiz, and see your score at the end. You can interact with the [deployed application here](https://ross-pauly-dev.github.io/CountryQuiz)
 
 ![Quiz screen](screenshots/quiz.png)
 
